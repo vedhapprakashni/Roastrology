@@ -31,17 +31,17 @@ export function RoastCard({ sign, roast, nickname, onRetry, onDifferentAngle, is
 
   return (
     <div 
-      className={`rounded-3xl p-6 md:p-8 animate-fade-in-up max-w-2xl mx-auto backdrop-blur-xl ${theme.animation}`}
+      className="rounded-3xl p-6 md:p-8 animate-fade-in-up max-w-2xl mx-auto backdrop-blur-xl"
       style={{
         background: `linear-gradient(135deg, hsl(0 0% 100% / 0.95), hsl(0 0% 100% / 0.85))`,
         border: `2px dashed ${theme.cardBorder}`,
         boxShadow: theme.glowColor,
       }}
     >
-      {/* Theme indicator */}
+      {/* Theme indicator (static so it doesn't shake) */}
       <div className="flex justify-center gap-2 mb-4">
         {theme.emojis.slice(0, 5).map((emoji, i) => (
-          <span key={i} className="text-xl animate-bounce-soft" style={{ animationDelay: `${i * 0.1}s` }}>
+          <span key={i} className="text-xl opacity-80">
             {emoji}
           </span>
         ))}
