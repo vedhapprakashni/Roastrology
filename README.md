@@ -250,17 +250,4 @@ Generates a personalized zodiac roast.
 This project is open source and available under the [MIT License](LICENSE).
 
 ---
-
-## 🙏 Acknowledgments
-
-- Built with [Lovable](https://lovable.dev)
-- UI components from [shadcn/ui](https://ui.shadcn.com)
-- Icons from [Lucide](https://lucide.dev)
-- Fonts from [Google Fonts](https://fonts.google.com)
-
----
-
-<div align="center">
-  <p>Made with ✨ magic and 🔥 cosmic sass</p>
-  <p><strong>May the stars roast you gently</strong></p>
-</div>
+Live Link: https://roastrology.lovable.app/
