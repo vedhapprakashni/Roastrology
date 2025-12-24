@@ -112,35 +112,31 @@ export function FairyBackground({ theme }: FairyBackgroundProps) {
 
   return (
     <div className="fairy-bg">
-      {/* Magic gradient balls */}
+      {/* Magic gradient balls - static, no animation */}
       {magicBalls.map((ball) => (
         <div
           key={`ball-${ball.id}`}
-          className="absolute rounded-full animate-drift blur-3xl"
+          className="absolute rounded-full blur-3xl"
           style={{
             left: `${ball.x}%`,
             top: `${ball.y}%`,
             width: `${ball.size}px`,
             height: `${ball.size}px`,
             background: `radial-gradient(circle, ${ball.color}, transparent)`,
-            animationDelay: `${ball.delay}s`,
-            animationDuration: `${15 + ball.delay * 2}s`,
           }}
         />
       ))}
 
-      {/* Fairy doodles */}
-      {doodles.map((doodle) => (
+      {/* Fairy doodles - static decorations */}
+      {doodles.slice(0, 12).map((doodle) => (
         <div
           key={doodle.id}
-          className={`absolute ${doodle.type === "sparkle" || doodle.type === "star" ? "animate-twinkle" : "animate-float"}`}
+          className="absolute opacity-40"
           style={{
             left: `${doodle.x}%`,
             top: `${doodle.y}%`,
             width: `${doodle.size}px`,
             height: `${doodle.size}px`,
-            animationDelay: `${doodle.delay}s`,
-            animationDuration: `${doodle.duration}s`,
             transform: `rotate(${doodle.rotation}deg)`,
             fontSize: `${doodle.size}px`,
             display: "flex",
@@ -152,26 +148,19 @@ export function FairyBackground({ theme }: FairyBackgroundProps) {
         </div>
       ))}
 
-      {/* Theme emojis scattered around */}
-      {theme && theme.emojis.map((emoji, i) => (
+      {/* Theme emojis - static */}
+      {theme && theme.emojis.slice(0, 3).map((emoji, i) => (
         <div
           key={`emoji-${i}`}
-          className={`absolute text-4xl opacity-30 ${theme.animation}`}
+          className="absolute text-3xl opacity-20"
           style={{
-            left: `${10 + i * 20}%`,
-            top: `${15 + (i % 3) * 30}%`,
-            animationDelay: `${i * 0.5}s`,
+            left: `${15 + i * 30}%`,
+            top: `${20 + (i % 2) * 40}%`,
           }}
         >
           {emoji}
         </div>
       ))}
-
-      {/* Extra sparkle trail */}
-      <div className="absolute top-20 left-10 text-4xl animate-sparkle" style={{ animationDelay: "0s" }}>✧</div>
-      <div className="absolute top-40 right-20 text-3xl animate-sparkle text-primary/40" style={{ animationDelay: "0.5s" }}>✦</div>
-      <div className="absolute bottom-32 left-1/4 text-5xl animate-sparkle text-secondary/30" style={{ animationDelay: "1s" }}>✧</div>
-      <div className="absolute top-1/3 right-1/3 text-2xl animate-sparkle text-accent/40" style={{ animationDelay: "1.5s" }}>✦</div>
     </div>
   );
 }
