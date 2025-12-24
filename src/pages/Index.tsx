@@ -1,21 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FairyBackground } from "@/components/FairyBackground";
 import { RoastForm } from "@/components/RoastForm";
 import { LoadingState } from "@/components/LoadingState";
 import { RoastCard } from "@/components/RoastCard";
 import { useRoast } from "@/hooks/useRoast";
 import { ZodiacSign } from "@/lib/zodiac";
+import { getZodiacTheme, ZodiacTheme } from "@/lib/zodiacThemes";
 
 const Index = () => {
   const [currentSign, setCurrentSign] = useState<ZodiacSign | null>(null);
   const [currentNickname, setCurrentNickname] = useState<string>("");
   const [currentIntensity, setCurrentIntensity] = useState<number>(2);
-  const { roast, isLoading, generateRoast } = useRoast();
+  const [currentTheme, setCurrentTheme] = useState<ZodiacTheme | null>(null);
+  const { roast, isLoading, generateRoast, clearRoast } = useRoast();
 
   const handleSubmit = async (date: Date, nickname: string, sign: ZodiacSign, intensity: number) => {
     setCurrentSign(sign);
     setCurrentNickname(nickname);
     setCurrentIntensity(intensity);
+    setCurrentTheme(getZodiacTheme(sign));
     await generateRoast(sign, nickname, intensity);
   };
 
@@ -25,15 +28,41 @@ const Index = () => {
     }
   };
 
+  const handleDifferentAngle = () => {
+    if (currentSign) {
+      generateRoast(currentSign, currentNickname, currentIntensity, true);
+    }
+  };
+
   const handleReset = () => {
     setCurrentSign(null);
     setCurrentNickname("");
     setCurrentIntensity(2);
+    setCurrentTheme(null);
+    clearRoast();
   };
 
+  // Apply dynamic theme to document
+  useEffect(() => {
+    if (currentTheme) {
+      document.documentElement.style.setProperty('--dynamic-gradient', currentTheme.gradient);
+      document.documentElement.style.setProperty('--dynamic-accent', currentTheme.accentHsl);
+      document.documentElement.style.setProperty('--dynamic-glow', currentTheme.glowColor);
+      document.documentElement.style.setProperty('--dynamic-border', currentTheme.cardBorder);
+    } else {
+      document.documentElement.style.removeProperty('--dynamic-gradient');
+      document.documentElement.style.removeProperty('--dynamic-accent');
+      document.documentElement.style.removeProperty('--dynamic-glow');
+      document.documentElement.style.removeProperty('--dynamic-border');
+    }
+  }, [currentTheme]);
+
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      <FairyBackground />
+    <main 
+      className="relative min-h-screen overflow-hidden transition-all duration-700"
+      style={currentTheme ? { background: currentTheme.gradient } : undefined}
+    >
+      <FairyBackground theme={currentTheme} />
       
       <div className="relative z-10 container mx-auto px-4 py-8 md:py-16">
         {/* Header */}
@@ -65,14 +94,16 @@ const Index = () => {
             </div>
           )}
 
-          {roast && currentSign && !isLoading && (
+          {roast && currentSign && !isLoading && currentTheme && (
             <div className="space-y-6">
               <RoastCard
                 sign={currentSign}
                 roast={roast}
                 nickname={currentNickname}
                 onRetry={handleRetry}
+                onDifferentAngle={handleDifferentAngle}
                 isLoading={isLoading}
+                theme={currentTheme}
               />
               
               <div className="text-center">

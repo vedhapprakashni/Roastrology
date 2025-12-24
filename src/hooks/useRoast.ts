@@ -7,7 +7,8 @@ interface UseRoastReturn {
   roast: string | null;
   isLoading: boolean;
   error: string | null;
-  generateRoast: (sign: ZodiacSign, nickname?: string, intensity?: number) => Promise<void>;
+  generateRoast: (sign: ZodiacSign, nickname?: string, intensity?: number, differentAngle?: boolean) => Promise<void>;
+  clearRoast: () => void;
 }
 
 export function useRoast(): UseRoastReturn {
@@ -15,7 +16,12 @@ export function useRoast(): UseRoastReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generateRoast = async (sign: ZodiacSign, nickname?: string, intensity: number = 2) => {
+  const clearRoast = () => {
+    setRoast(null);
+    setError(null);
+  };
+
+  const generateRoast = async (sign: ZodiacSign, nickname?: string, intensity: number = 2, differentAngle: boolean = false) => {
     setIsLoading(true);
     setError(null);
     setRoast(null);
@@ -27,6 +33,7 @@ export function useRoast(): UseRoastReturn {
           traits: sign.traits,
           nickname: nickname || undefined,
           intensity,
+          differentAngle,
         },
       });
 
@@ -52,5 +59,5 @@ export function useRoast(): UseRoastReturn {
     }
   };
 
-  return { roast, isLoading, error, generateRoast };
+  return { roast, isLoading, error, generateRoast, clearRoast };
 }
