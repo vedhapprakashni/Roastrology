@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
+import { ZodiacTheme } from "@/lib/zodiacThemes";
 
 interface Doodle {
   id: number;
@@ -20,7 +21,11 @@ interface MagicBall {
   delay: number;
 }
 
-const pastelColors = [
+interface FairyBackgroundProps {
+  theme?: ZodiacTheme | null;
+}
+
+const defaultPastelColors = [
   "rgba(245, 194, 231, 0.4)", // pink
   "rgba(203, 195, 227, 0.4)", // lavender
   "rgba(178, 226, 220, 0.4)", // mint
@@ -51,9 +56,24 @@ const DoodleIcon = ({ type }: { type: Doodle["type"] }) => {
   }
 };
 
-export function FairyBackground() {
+export function FairyBackground({ theme }: FairyBackgroundProps) {
   const [doodles, setDoodles] = useState<Doodle[]>([]);
   const [magicBalls, setMagicBalls] = useState<MagicBall[]>([]);
+
+  // Get colors based on theme or defaults
+  const getThemeColors = () => {
+    if (theme) {
+      const hsl = theme.accentHsl;
+      return [
+        `hsla(${hsl} / 0.3)`,
+        `hsla(${hsl} / 0.25)`,
+        `hsla(${hsl} / 0.2)`,
+        `hsla(${hsl} / 0.35)`,
+        `hsla(${hsl} / 0.15)`,
+      ];
+    }
+    return defaultPastelColors;
+  };
 
   useEffect(() => {
     const types: Doodle["type"][] = ["sparkle", "star", "heart", "butterfly", "crystal", "wand"];
@@ -72,7 +92,10 @@ export function FairyBackground() {
       });
     }
     setDoodles(newDoodles);
+  }, []);
 
+  useEffect(() => {
+    const colors = getThemeColors();
     const newBalls: MagicBall[] = [];
     for (let i = 0; i < 8; i++) {
       newBalls.push({
@@ -80,12 +103,12 @@ export function FairyBackground() {
         x: Math.random() * 100,
         y: Math.random() * 100,
         size: Math.random() * 150 + 100,
-        color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
+        color: colors[Math.floor(Math.random() * colors.length)],
         delay: Math.random() * 3,
       });
     }
     setMagicBalls(newBalls);
-  }, []);
+  }, [theme]);
 
   return (
     <div className="fairy-bg">
@@ -126,6 +149,21 @@ export function FairyBackground() {
           }}
         >
           <DoodleIcon type={doodle.type} />
+        </div>
+      ))}
+
+      {/* Theme emojis scattered around */}
+      {theme && theme.emojis.map((emoji, i) => (
+        <div
+          key={`emoji-${i}`}
+          className={`absolute text-4xl opacity-30 ${theme.animation}`}
+          style={{
+            left: `${10 + i * 20}%`,
+            top: `${15 + (i % 3) * 30}%`,
+            animationDelay: `${i * 0.5}s`,
+          }}
+        >
+          {emoji}
         </div>
       ))}
 

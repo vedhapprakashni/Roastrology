@@ -1,9 +1,10 @@
 import { ZodiacSign } from "@/lib/zodiac";
+import { ZodiacTheme } from "@/lib/zodiacThemes";
 import { ZodiacBadge } from "./ZodiacBadge";
 import { VoiceRoast } from "./VoiceRoast";
 import { ShareableCard } from "./ShareableCard";
 import { Button } from "@/components/ui/button";
-import { Copy, RefreshCw, Check } from "lucide-react";
+import { Copy, RefreshCw, Check, Shuffle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,10 +13,12 @@ interface RoastCardProps {
   roast: string;
   nickname?: string;
   onRetry: () => void;
+  onDifferentAngle: () => void;
   isLoading: boolean;
+  theme: ZodiacTheme;
 }
 
-export function RoastCard({ sign, roast, nickname, onRetry, isLoading }: RoastCardProps) {
+export function RoastCard({ sign, roast, nickname, onRetry, onDifferentAngle, isLoading, theme }: RoastCardProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -27,15 +30,34 @@ export function RoastCard({ sign, roast, nickname, onRetry, isLoading }: RoastCa
   };
 
   return (
-    <div className="card-fairy rounded-3xl p-6 md:p-8 animate-fade-in-up max-w-2xl mx-auto">
+    <div 
+      className={`rounded-3xl p-6 md:p-8 animate-fade-in-up max-w-2xl mx-auto backdrop-blur-xl ${theme.animation}`}
+      style={{
+        background: `linear-gradient(135deg, hsl(0 0% 100% / 0.95), hsl(0 0% 100% / 0.85))`,
+        border: `2px dashed ${theme.cardBorder}`,
+        boxShadow: theme.glowColor,
+      }}
+    >
+      {/* Theme indicator */}
+      <div className="flex justify-center gap-2 mb-4">
+        {theme.emojis.slice(0, 5).map((emoji, i) => (
+          <span key={i} className="text-xl animate-bounce-soft" style={{ animationDelay: `${i * 0.1}s` }}>
+            {emoji}
+          </span>
+        ))}
+      </div>
+
       {/* Header */}
       <div className="flex flex-col items-center gap-4 mb-6">
-        <ZodiacBadge sign={sign} size="lg" />
+        <ZodiacBadge sign={sign} size="lg" theme={theme} />
         {nickname && (
           <p className="text-muted-foreground font-display">
-            aka <span className="text-secondary font-bold">{nickname}</span>
+            aka <span className="font-bold" style={{ color: `hsl(${theme.accentHsl})` }}>{nickname}</span>
           </p>
         )}
+        <p className="text-xs font-display text-muted-foreground/60">
+          ✨ {theme.name} Theme ✨
+        </p>
       </div>
 
       {/* Roast content */}
@@ -60,6 +82,20 @@ export function RoastCard({ sign, roast, nickname, onRetry, isLoading }: RoastCa
         >
           <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
           Roast me again
+        </Button>
+
+        <Button
+          onClick={onDifferentAngle}
+          disabled={isLoading}
+          variant="outline"
+          className="font-display rounded-xl"
+          style={{ 
+            borderColor: `hsl(${theme.accentHsl} / 0.5)`,
+            color: `hsl(${theme.accentHsl})`,
+          }}
+        >
+          <Shuffle className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+          Different angle
         </Button>
         
         <Button
