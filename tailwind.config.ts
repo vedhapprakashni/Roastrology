@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Fredoka", "sans-serif"],
-        body: ["Space Grotesk", "sans-serif"],
+        display: ["Nunito", "sans-serif"],
+        body: ["Quicksand", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -89,6 +89,7 @@ export default {
         sm: "calc(var(--radius) - 4px)",
         xl: "calc(var(--radius) + 4px)",
         "2xl": "calc(var(--radius) + 8px)",
+        "3xl": "2rem",
       },
       keyframes: {
         "accordion-down": {
@@ -120,15 +121,15 @@ export default {
         "scale-in": "scale-in 0.3s ease-out forwards",
       },
       backgroundImage: {
-        "gradient-chaos": "var(--gradient-chaos)",
-        "gradient-neon": "var(--gradient-neon)",
+        "gradient-fairy": "var(--gradient-fairy)",
         "gradient-sunset": "var(--gradient-sunset)",
+        "gradient-mint": "var(--gradient-mint)",
+        "gradient-dreamy": "var(--gradient-dreamy)",
       },
       boxShadow: {
-        "neon-pink": "var(--shadow-neon-pink)",
-        "neon-green": "var(--shadow-neon-green)",
-        "neon-orange": "var(--shadow-neon-orange)",
+        fairy: "var(--shadow-fairy)",
         glow: "var(--shadow-glow)",
+        card: "var(--shadow-card)",
       },
     },
   },
