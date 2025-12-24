@@ -88,11 +88,7 @@ export function RoastCard({ sign, roast, nickname, onRetry, onDifferentAngle, is
           onClick={onDifferentAngle}
           disabled={isLoading}
           variant="outline"
-          className="font-display rounded-xl"
-          style={{ 
-            borderColor: `hsl(${theme.accentHsl} / 0.5)`,
-            color: `hsl(${theme.accentHsl})`,
-          }}
+          className="bg-card border-accent/50 hover:border-accent hover:bg-accent/20 text-accent-foreground font-display rounded-xl"
         >
           <Shuffle className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
           Different angle
